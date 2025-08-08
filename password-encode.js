@@ -1,3 +1,5 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const bycript = require('bcrypt');
 
 async function passwordGenerate(password){
@@ -6,4 +8,4 @@ async function passwordGenerate(password){
     console.log("hash gerado", hash)
 }
 
-passwordGenerate("1234")
+passwordGenerate(process.env.ADMIN_PASS);
