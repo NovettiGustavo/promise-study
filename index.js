@@ -44,68 +44,16 @@ fazerLogin("admin", "1234")
   });
 */
 
-const userSimulation = require('./user');
-
-function getUser(user,password){
-    const findUser = userSimulation.find(u => u.user === user && u.password === password)
-    return findUser;
-}
-
-function login(user, password) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            const foundUser = getUser(user,password)
-             console.log("Fazendo login...")
-            if(!foundUser){
-                reject({type: "Login error", message: "Invalid user or password"})
-            }else{
-                resolve(foundUser)
-            }
-           
-        },2000)
-    })
-}
-
-
-function getPrivateData(user,password){
-    return new Promise((resolve, reject) =>{
-        setTimeout(() =>{
-            const foundUser = getUser(user, password);
-            if(foundUser){
-                if(foundUser.user !== "admin"){
-                    reject("User not allowed")
-                }else{
-                    resolve(foundUser.secret_key)
-                }
-            }else{
-                reject("User not informed!")
-            }
-        }, 2000)
-    })
-}
-
-function logRegister(logMessage, status){
-        return new Promise((resolve) =>{
-            const timestamp = new Date().toISOString()
-
-            const logEntry = {
-                timestamp,
-                status,
-                logMessage
-            }
-
-            console.log(`${logEntry.logMessage}, ${logEntry.status}, ${logEntry.timestamp}`)
-
-            resolve(logEntry)
-        })
-}
+const {login} = require('./login');
+const {getPrivateData} = require('./data')
+const {logRegister} = require('./log')
 
 async function main(){
     try{
         const user = await login("admin", "1234");
         const data = await getPrivateData(user.user, user.password);
         console.log("Data:", data);
-        return logRegister("Resolved","200" );
+        await logRegister("Resolved", "200")
     }catch(error){
         await logRegister("rejected","400");
         return error.message;
