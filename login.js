@@ -1,18 +1,15 @@
 const {getUser} = require('./get-user')
 
-function login(user, password) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            const foundUser = getUser(user,password)
-             console.log("Fazendo login...")
-            if(!foundUser){
-                reject({type: "Login error", message: "Invalid user or password"})
-            }else{
-                resolve(foundUser)
-            }
-           
-        },2000)
-    })
-}
+async function login(user, password) {
+        await new Promise(resolve => setTimeout(resolve,2000));
+
+        const foundUser = await getUser(user, password);
+         if (!foundUser) {
+        throw { type: "Login error", message: "Invalid user or password" };
+    }
+
+    return foundUser;
+    }
+
 
 module.exports = {login}

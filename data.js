@@ -1,20 +1,16 @@
-const {getUser} = require('./get-user')
+const { getUser } = require('./get-user')
 
-function getPrivateData(user,password){
-    return new Promise((resolve, reject) =>{
-        setTimeout(() =>{
-            const foundUser = getUser(user, password);
-            if(foundUser){
-                if(foundUser.user !== "admin"){
-                    reject("User not allowed")
-                }else{
-                    resolve(foundUser.secret_key)
-                }
-            }else{
-                reject("User not informed!")
-            }
-        }, 2000)
-    })
+async function getPrivateData(user, password) {
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    const foundUser = await getUser(user, password)
+
+    if (!foundUser) throw new Error("User not informed!");
+
+    if (foundUser.user !== "admin") {
+        throw new Error("User not allowed");
+    }
+
+    return foundUser.secret_key
 }
 
-module.exports = {getPrivateData}
+module.exports = { getPrivateData }

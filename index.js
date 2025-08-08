@@ -51,11 +51,12 @@ const {logRegister} = require('./log')
 async function main(){
     try{
         const user = await login("admin", "1234");
-        const data = await getPrivateData(user.user, user.password);
+        const data = await getPrivateData(user.user, "1234");
         console.log("Data:", data);
         await logRegister("Resolved", "200")
     }catch(error){
         await logRegister("rejected","400");
+        console.error(error)
         return error.message;
     }finally{
         const msg = await logRegister("Finally process", "201");
